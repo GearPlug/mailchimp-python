@@ -1,8 +1,6 @@
 from requests.auth import AuthBase
 import requests
 
-token = "568cf681e9fce8af17b08553573a3ec8"
-
 
 class ClientOauth(AuthBase):
 
