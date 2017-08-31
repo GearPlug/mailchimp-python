@@ -21,19 +21,19 @@ class Client(object):
 
     def _get(self, endpoint, auth):
         response = requests.get(self.base_url + endpoint, auth=auth)
-        return self._parse(response)
+        #return response.json()
+        return self._parse(response).json()
 
     def _post(self, endpoint, auth, data):
         response = requests.post(self.base_url + endpoint, auth=auth, json=data)
-        return self._parse(response)
+        return self._parse(response).json()
 
     def _delete(self, endpoint, auth):
         response = requests.delete(self.base_url + endpoint, auth=auth)
         return self._parse(response)
 
     def _parse(self, response):
-
-        if response.status_code != requests.codes.ok:
+        if not response.ok:
             data = response.json()
             if ('detail' in data and 'status' in data):
                 code = data['status']
@@ -162,6 +162,15 @@ class Client(object):
         """
         endpoint = 'lists/{0}'.format(list_id)
         return self._delete(endpoint, auth=self.auth)
+
+    def get_list_members(self, list_id):
+        """
+         Get all members form a list
+        :param list_id: A string with id_list.
+        :return: A dictionary with all members from a list
+        """
+        endpoint = "lists/{0}/members/".format(list_id)
+        return self._get(endpoint, auth=self.auth)
 
     def add_new_list_member(self, list_id, data):
         """
