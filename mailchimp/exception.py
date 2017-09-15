@@ -48,3 +48,6 @@ class UnexpectedError(BaseError):
 
 class CredentialRequired(BaseError):
     pass
+
+class InvalidToken(BaseError):
+    pass

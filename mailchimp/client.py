@@ -10,7 +10,7 @@ class Client(object):
     def __init__(self, user=None, apikey=None, access_token=None):
         if access_token:
             self.access_token = access_token
-            c=ClientOauth(self.access_token)
+            c = ClientOauth(self.access_token)
             self.auth = c
             self.base_url = c.get_base_url() + '/3.0/'
         elif user and apikey:
@@ -250,8 +250,9 @@ class Client(object):
     def create_merge_field(self):
         raise NotImplementedError
 
-    def get_merge_fields(self):
-        raise NotImplementedError
+    def get_merge_fields(self, list_id):
+        endpoint = "/lists/{0}/merge-fields".format(list_id)
+        return self._get(endpoint, auth=self.auth)
 
     def get_specific_merge_field(self):
         raise NotImplementedError

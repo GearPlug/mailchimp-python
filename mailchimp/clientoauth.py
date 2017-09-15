@@ -1,4 +1,5 @@
 from requests.auth import AuthBase
+from mailchimp import exception
 import requests
 
 
@@ -19,5 +20,8 @@ class ClientOauth(AuthBase):
             raise e
 
     def get_base_url(self):
-        return self.get_metadata()['api_endpoint']
-
+        url = self.get_metadata()
+        if "api_endpoint" in url:
+            return url["api_endpoint"]
+        else:
+            raise exception.InvalidToken("Invalid token unable to load login and user")
