@@ -1,3 +1,4 @@
+import json
 import requests
 import hashlib
 from mailchimp.enumerator import ErrorEnum
@@ -31,6 +32,10 @@ class Client(object):
     def _delete(self, endpoint, auth):
         response = requests.delete(self.base_url + endpoint, auth=auth)
         return self._parse(response)
+    
+    def _put(self, endpoint, auth, data):
+        response = requests.put(self.base_url + endpoint, data=data, auth=auth)
+        return self._parse(response).json()
 
     def _parse(self, response):
         if not response.ok:
@@ -200,10 +205,12 @@ class Client(object):
         :param list_id: A string with list id
         :param email: a string with email address
         """
+        data = {'status': 'unsubscribed'}
+        payload = json.dumps(data)
         email_address = email.lower()
         email_address = hashlib.md5(email_address.encode('utf-8')).hexdigest()
         endpoint = 'lists/{0}/members/{1}'.format(list_id, email_address)
-        return self._delete(endpoint, auth=self.auth)
+        return self._delete(endpoint, auth=self.auth, data=payload)
 
     def update_list(self):
         raise NotImplementedError
